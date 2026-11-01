@@ -11,6 +11,15 @@ const DUMMY_SALT = new Uint8Array(16);
 const DUMMY_HASH = new Uint8Array(32);
 const encoder = new TextEncoder();
 
+function timingSafeEqual(left, right) {
+	if (left.length !== right.length) return false;
+	let difference = 0;
+	for (let index = 0; index < left.length; index += 1) {
+		difference |= left[index] ^ right[index];
+	}
+	return difference === 0;
+}
+
 function json(body, status, headers = {}) {
 	return new Response(JSON.stringify(body), {
 		status,
@@ -49,7 +58,7 @@ async function verifyPassword(password, encodedHash) {
 	const expected = validFormat ? decodeBase64(parts[3]) : DUMMY_HASH;
 	if (salt.length !== 16 || expected.length !== 32) return false;
 	const actual = await derivePassword(password, salt, iterations);
-	return crypto.subtle.timingSafeEqual(actual, expected) && validFormat;
+	return timingSafeEqual(actual, expected) && validFormat;
 }
 
 async function signSession(payload, secret) {
