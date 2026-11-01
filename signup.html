@@ -19,7 +19,7 @@
     <span class="eyebrow">Create your account</span>
     <h1 class="page-title">아산 홈페이지 회원가입</h1>
     <p class="lead">회원가입 화면을 별도 페이지로 구성했습니다. 닉네임, 이메일, 성별, 집주소와 비밀번호 입력란을 확인할 수 있습니다.</p>
-        <p class="warning"><strong>개인정보 수집 안내</strong>회원가입 시 닉네임·이메일·비밀번호를 입력받습니다. 성별과 집주소는 선택 항목이며, 집주소는 계정에 꼭 필요한 경우에만 입력해 주세요. 비밀번호는 안전한 해시로 보호해 저장합니다. 수집된 정보의 저장 및 처리에 동의할 때만 가입을 진행해 주세요.</p>
+        <p class="warning"><strong>개인정보 수집 안내</strong>닉네임·이메일·비밀번호는 계정 생성 및 로그인에 사용합니다. 성별과 집주소는 선택 항목이며, 집주소는 꼭 필요한 경우에만 입력해 주세요. 비밀번호 원문은 저장하지 않고 암호학적으로 해시해 보호합니다. 개인정보 처리에 동의하는 경우에만 가입을 진행해 주세요.</p>
     <section class="card" aria-labelledby="signup-form-title">
       <h2 class="card-title" id="signup-form-title">회원 정보</h2>
       <p class="card-lead">닉네임, 이메일, 비밀번호는 필수입니다. 성별과 집주소는 선택이며 비워 둘 수 있습니다.</p>
@@ -27,7 +27,7 @@
         <div class="field"><label for="signup-nickname">닉네임</label><input id="signup-nickname" name="nickname" type="text" autocomplete="nickname" minlength="2" maxlength="50" placeholder="닉네임을 입력하세요" required></div>
         <div class="field"><label for="signup-email">이메일 주소</label><input id="signup-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@example.com" required></div>
         <fieldset class="field" style="margin:0;padding:0;border:0"><legend class="legend">성별 <span class="hint">(선택)</span></legend><div class="gender-options"><label class="gender-option"><input type="radio" name="gender" value="female">여성</label><label class="gender-option"><input type="radio" name="gender" value="male">남성</label><label class="gender-option"><input type="radio" name="gender" value="undisclosed">선택 안 함</label></div><span class="hint">선택하지 않아도 가입할 수 있습니다.</span></fieldset>
-        <div class="field"><label for="signup-address">집주소 <span class="hint">(선택)</span></label><input id="signup-address" name="address" type="text" autocomplete="street-address" maxlength="500" placeholder="서비스에 필요한 경우에만 입력해 주세요"><span class="hint">정확한 집주소는 선택 정보입니다. 가입에 필요하지 않으면 비워 두세요.</span></div>
+        <div class="field"><label for="signup-address">집주소 <span class="hint">(선택)</span></label><input id="signup-address" name="address" type="text" autocomplete="street-address" maxlength="500" placeholder="서비스에 필요한 경우에만 입력해 주세요"><span class="hint">정확한 집주소는 민감한 개인정보입니다. 선택 입력이며, 계정 사용에 필요하지 않으면 비워 두세요.</span></div>
         <div class="field"><label for="signup-password">비밀번호</label><input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" placeholder="12자 이상 입력하세요" required><span class="hint">12~128자. 안전을 위해 12자 이상의 비밀번호를 사용하세요.</span></div>
         <label class="consent"><input id="signup-consent" name="consent" type="checkbox" required><span>회원정보 수집 및 저장 안내를 확인했으며, 회원가입에 필요한 정보 처리에 동의합니다.</span></label>
         <button class="submit" type="submit">회원가입</button>

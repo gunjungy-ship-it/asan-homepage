@@ -41,12 +41,13 @@ sqlite3 inquiries.sqlite "SELECT id, nickname, email, gender, home_address, pass
 - `POST /api/auth/login`: 이메일과 비밀번호를 검증하고 8시간 유효한 `HttpOnly`, `Secure`, `SameSite=Lax` 세션 쿠키를 발급합니다.
 - 비밀번호는 Web Crypto `PBKDF2-SHA-256` (600,000회 반복, 사용자별 무작위 salt)으로 해시합니다. 평문 비밀번호는 저장하지 않습니다.
 - 이메일 주소는 대소문자를 구분하지 않고 고유하게 처리합니다. 사용자 데이터는 API 응답이나 로그에 반환하지 않습니다.
+- Wrangler 설정은 D1 database `asan-homepage-db`를 `DB` binding으로 가리킵니다. Production의 session signing key `SESSION_SECRET`은 Wrangler secret으로 저장하며 Git에 커밋하지 않습니다.
 
 **아직 제공하지 않는 기능:** 로그아웃, 로그인 세션 검증을 사용하는 보호 페이지, 사용자 프로필 조회·수정, 계정 삭제. 현재 Pages Function은 회원가입·로그인 요청만 제공합니다.
 
 **개인정보 주의:** 정확한 집주소와 성별은 개인정보이며, 꼭 필요한 경우에만 수집하세요. `users`의 데이터 삭제/탈퇴 및 보관 정책은 추후 운영 기준에 맞춰 별도로 구현해야 합니다.
 
-로그인 및 회원가입 함수 배포는 기존 Pages 프로젝트의 `DB` Production binding을 사용하도록 구성했습니다. Preview에는 production 사용자의 개인정보를 분리하기 위해 운영 D1을 연결하지 않았습니다. 문의 양식은 DB/API와 연결되지 않아 계속 비활성 상태입니다.
+로그인 및 회원가입 함수는 기존 Pages 프로젝트의 Production `DB` binding을 사용합니다. Production Pages secret `SESSION_SECRET`이 설정되어 있어야 로그인 세션을 발급합니다. Preview에는 Production 사용자 개인정보가 섞이지 않도록 Production D1을 연결하지 않았습니다. 문의 양식은 DB/API와 연결되지 않아 계속 비활성 상태입니다.
 
 ## 기술 스택
 
@@ -57,12 +58,14 @@ sqlite3 inquiries.sqlite "SELECT id, nickname, email, gender, home_address, pass
 - 로컬 문의 DB: SQLite
 - 검색 엔진 안내: `robots.txt`, `sitemap.xml`
 
-이 프로젝트에는 현재 백엔드 코드나 운영 데이터베이스 연결 설정이 없습니다. SQLite 로컬 파일은 Cloudflare Pages 서버에서 접근할 수 없으며, 웹 방문자가 같은 로컬 DB를 공유하지 않습니다.
+이 프로젝트에는 회원가입·로그인 Pages Functions 및 Cloudflare D1 Production DB 연결이 있습니다. 로컬 SQLite 파일은 개발 PC 전용으로 Cloudflare Pages 서버에서 접근할 수 없으며, 방문자 회원정보는 Cloudflare D1에 별도로 저장됩니다.
 
 ## 회원가입·로그인 화면
 
 `signup.html`과 `login.html`을 각각 독립된 HTML 페이지로 분리했습니다. `index.html`의 상단 회원 메뉴에서 이동할 수 있으며, 두 계정 페이지 사이에도 상호 링크가 있습니다. 회원가입 화면에는 닉네임, 이메일 주소, 성별, 집주소와 비밀번호 입력란이 있습니다. 홈페이지 주소 기준으로 `/signup.html`, `/login.html`에서 직접 접근할 수 있습니다.
 
-현재 화면은 디자인 예시이며 로그인·가입 인증이나 정보 저장을 처리하는 백엔드는 없습니다. 입력란, 동의란, 버튼을 비활성화했고 실제 개인정보가 저장·전송되지 않는다는 점을 화면에 안내합니다. 성별과 집주소는 개인정보이므로 실제 기능을 구현하기 전에는 입력하지 마세요. 안전한 회원 기능은 추후 백엔드와 개인정보 처리 절차를 마련한 뒤 연결해야 합니다. 페이지 주소는 `/signup.html`, `/login.html`입니다.
+페이지 주소는 `/signup.html`, `/login.html`입니다. 성별과 집주소는 선택 항목입니다. 정확한 집주소는 민감한 개인정보이므로 꼭 필요한 경우에만 수집하고 보유·삭제 정책을 안내하세요. 문의 폼은 아직 저장 API에 연결되지 않았습니다.
 
 각 계정 페이지의 HTML `<title>`과 meta description은 해당 파일에 별도로 설정되어 있습니다. 세부 SEO 문안은 [`seo-pages.md`](seo-pages.md)를 참고하세요.
+
+로컬 Pages Functions 개발 시 `.dev.vars` 파일에 48바이트 이상의 무작위 `SESSION_SECRET`을 설정합니다. `.dev.vars`는 `.gitignore` 대상이며 반드시 Production secret과 분리합니다. 운영 비밀값은 `npx wrangler pages secret put SESSION_SECRET --project-name asan-homepage` 명령으로 설정합니다.
