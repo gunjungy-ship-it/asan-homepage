@@ -20,7 +20,7 @@
 
 문의 테이블은 문의 유형, 제목, 내용, 처리 상태, 생성 시각 및 자동 증가 ID를 저장하도록 준비되어 있습니다. 로컬 DB에 테이블이 생성된 상태이며 홈페이지나 공개 서버의 문의 데이터가 그곳으로 저장되지는 않습니다.
 
-로컬 SQLite와 Production D1에는 3NF 정규화를 적용했습니다. 계정 정보는 `users`, 선택 프로필 정보는 `user_profiles`에 나뉘며, 회원가입 시 두 행은 D1 batch transaction으로 함께 생성됩니다. 회원가입 전이면 두 테이블 모두 비어 있습니다. 비밀번호는 평문으로 저장하지 않으며, 성별과 집주소는 개인정보이므로 꼭 필요한 경우에만 수집해야 합니다.
+로컬 SQLite와 Production D1에는 3NF 정규화를 적용했습니다. 계정 정보는 `users`, 선택 프로필 정보는 `user_profiles`에 나뉘며, 회원가입 시 두 행은 D1 batch transaction으로 함께 생성됩니다. 로컬 DB에는 예시 문의가 10건 있고 회원은 없습니다. Production D1의 문의·회원·프로필 데이터는 현재 비어 있습니다. 비밀번호는 평문으로 저장하지 않으며, 성별과 집주소는 개인정보이므로 꼭 필요한 경우에만 수집해야 합니다.
 
 ## DB 3NF 정규화
 
@@ -89,4 +89,4 @@ sqlite3 inquiries.sqlite "SELECT i.id, c.code, i.subject, i.status FROM inquirie
 
 각 계정 페이지의 HTML `<title>`과 meta description은 해당 파일에 별도로 설정되어 있습니다. 세부 SEO 문안은 [`seo-pages.md`](seo-pages.md)를 참고하세요.
 
-로컬 Pages Functions 개발 시 `.dev.vars` 파일에 48바이트 이상의 무작위 `SESSION_SECRET`을 설정합니다. `.dev.vars`는 `.gitignore` 대상이며 반드시 Production secret과 분리합니다. 운영 비밀값은 `npx wrangler pages secret put SESSION_SECRET --project-name asan-homepage` 명령으로 설정합니다. Git 연동 Production에서는 secret을 설정한 뒤 `layout` 브랜치에 변경을 푸시해 새 배포가 완료되어야 로그인 API가 해당 값을 사용합니다.
+로컬 Pages Functions 개발 시 `.dev.vars` 파일에 48바이트 이상의 무작위 `SESSION_SECRET`을 설정합니다. `.dev.vars`는 `.gitignore` 대상이며 반드시 Production secret과 분리합니다. 운영 비밀값은 `npx wrangler pages secret put SESSION_SECRET --project-name asan-homepage` 명령으로 설정합니다. Git 연동 Production에서는 secret을 설정한 뒤 `layout` 브랜치에 변경을 푸시해 새 배포가 완료되어야 로그인 API가 해당 값을 사용합니다. Production secret이 설정되지 않으면 가입은 저장될 수 있지만 로그인이 HTTP 503으로 실패합니다.
