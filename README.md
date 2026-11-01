@@ -21,6 +21,8 @@
 
 `migrations/0001_create_inquiries.sql`에 문의 테이블 하나를 생성하는 스키마가 있습니다.
 
+개발 PC에는 SQLite 3 CLI를 설치했고, 저장소 폴더 안에 **로컬 확인용** `inquiries.sqlite` 파일과 빈 `inquiries` 테이블을 만들었습니다. 이 파일은 `.gitignore`에 포함되어 GitHub에 올라가지 않으며 Cloudflare 운영 DB와도 자동 동기화되지 않습니다. Cloudflare Pages 공개 문의 저장은 아래의 Cloudflare D1 연결을 별도로 완료해야 사용할 수 있습니다.
+
 | 컬럼 | 용도 |
 | --- | --- |
 | `id` | 자동 증가 접수 번호 |
@@ -79,6 +81,13 @@ npx wrangler pages dev .
 ```
 
 Wrangler가 안내하는 로컬 주소에서 홈페이지를 열고 테스트 문의를 작성합니다. 로컬 모드의 문의 기록은 로컬 개발 저장소에만 남고, Production database에 저장되지 않습니다. 제출 전 `/api/inquiries`가 `{ "ready": true }`를 반환하는지 확인하세요. 데이터베이스 binding·테이블 migration·함수 배포가 끝나지 않았으면 문의 입력란은 비활성 상태를 유지합니다.
+
+수동으로 저장소에 포함되지 않는 로컬 SQLite 파일을 확인하려면 `sqlite3` 명령줄 도구로 실행합니다.
+
+```powershell
+sqlite3 inquiries.sqlite ".schema inquiries"
+sqlite3 inquiries.sqlite "SELECT id, category, subject, status, created_at FROM inquiries;"
+```
 
 ## 페이지 구성
 
