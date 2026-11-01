@@ -1,0 +1,12 @@
+ALTER TABLE inquiries ADD COLUMN updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE inquiries ADD COLUMN deleted_at TEXT DEFAULT NULL;
+
+CREATE TRIGGER IF NOT EXISTS inquiries_updated_at
+AFTER UPDATE ON inquiries
+FOR EACH ROW
+WHEN NEW.updated_at = OLD.updated_at
+BEGIN
+  UPDATE inquiries
+  SET updated_at = CURRENT_TIMESTAMP
+  WHERE id = NEW.id;
+END;

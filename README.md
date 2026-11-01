@@ -11,10 +11,13 @@
 - SQLite CLI: `3.53.4`
 - 로컬 데이터베이스: `inquiries.sqlite`
 - 테이블 생성 스키마: [`migrations/0001_create_inquiries.sql`](migrations/0001_create_inquiries.sql)
+- 기존 테이블 업데이트 스키마: [`migrations/0002_add_inquiry_audit_timestamps.sql`](migrations/0002_add_inquiry_audit_timestamps.sql)
 - 테이블 이름: `inquiries`
 - DB 파일은 `.gitignore` 처리되어 저장소나 GitHub에 올라가지 않습니다.
 
 문의 테이블은 문의 유형, 제목, 내용, 처리 상태, 생성 시각 및 자동 증가 ID를 저장하도록 준비되어 있습니다. 로컬 DB에 테이블이 생성된 상태이며 홈페이지나 공개 서버의 문의 데이터가 그곳으로 저장되지는 않습니다.
+
+`updated_at`은 행이 수정되면 SQLite 트리거가 현재 시각으로 갱신합니다. `deleted_at`은 기본값이 `NULL`이며, 나중에 백엔드를 만들 때 실제 행을 지우지 않고 소프트 삭제 시각을 기록할 수 있도록 마련했습니다. 현재 이 두 기능도 DB 준비 단계이며 문의 입력·수정·삭제 API는 아직 없습니다.
 
 ### 로컬 DB 확인하기
 
@@ -22,7 +25,7 @@
 
 ```powershell
 sqlite3 inquiries.sqlite ".schema inquiries"
-sqlite3 inquiries.sqlite "SELECT id, category, subject, status, created_at FROM inquiries;"
+sqlite3 inquiries.sqlite "SELECT id, category, subject, status, created_at, updated_at, deleted_at FROM inquiries;"
 ```
 
 ## 아직 구현하지 않은 기능
