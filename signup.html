@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f7f8f4">
-  <meta name="description" content="아산 홈페이지 회원가입 화면 예시입니다. 아직 가입 기능이 없어 입력한 정보는 전송되거나 저장되지 않습니다.">
+  <meta name="description" content="아산 홈페이지 회원가입 페이지입니다. 회원정보를 안전하게 등록하고 아산 여행 정보를 이용하세요.">
   <title>회원가입 | 아산, 쉼이 머무는 순간</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,22 +19,25 @@
     <span class="eyebrow">Create your account</span>
     <h1 class="page-title">아산 홈페이지 회원가입</h1>
     <p class="lead">회원가입 화면을 별도 페이지로 구성했습니다. 닉네임, 이메일, 성별, 집주소와 비밀번호 입력란을 확인할 수 있습니다.</p>
-    <p class="warning"><strong>중요: 회원가입과 정보 저장 기능은 아직 준비되지 않았습니다.</strong>이 페이지는 HTML·CSS 디자인 예시이며 모든 입력란과 버튼이 비활성화되어 있습니다. 입력한 정보는 전송되거나 저장되지 않습니다. 실제 집주소·성별·비밀번호 등 개인정보를 입력하지 마세요.</p>
+        <p class="warning"><strong>개인정보 수집 안내</strong>회원가입 시 닉네임·이메일·비밀번호를 입력받습니다. 성별과 집주소는 선택 항목이며, 집주소는 계정에 꼭 필요한 경우에만 입력해 주세요. 비밀번호는 안전한 해시로 보호해 저장합니다. 수집된 정보의 저장 및 처리에 동의할 때만 가입을 진행해 주세요.</p>
     <section class="card" aria-labelledby="signup-form-title">
       <h2 class="card-title" id="signup-form-title">회원 정보</h2>
-      <p class="card-lead">향후 계정 기능을 위한 입력 화면 예시입니다. 성별과 집주소는 개인정보이므로 실제 서비스에서 필요한 경우에만 수집해야 합니다.</p>
-      <form class="form" action="#" method="get">
-        <div class="field"><label for="signup-nickname">닉네임</label><input id="signup-nickname" name="nickname" type="text" autocomplete="nickname" placeholder="닉네임을 입력하세요" disabled></div>
-        <div class="field"><label for="signup-email">이메일 주소</label><input id="signup-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" disabled></div>
-        <fieldset class="field" style="margin:0;padding:0;border:0"><legend class="legend">성별</legend><div class="gender-options"><label class="gender-option"><input type="radio" name="gender" value="female" disabled>여성</label><label class="gender-option"><input type="radio" name="gender" value="male" disabled>남성</label><label class="gender-option"><input type="radio" name="gender" value="undisclosed" disabled>선택 안 함</label></div><span class="hint">필수 정보가 아니라면 성별을 수집하지 않는 방식을 권장합니다.</span></fieldset>
-        <div class="field"><label for="signup-address">집주소</label><input id="signup-address" name="address" type="text" autocomplete="street-address" placeholder="집주소 입력란 (실제 주소를 입력하지 마세요)" disabled><span class="hint">정확한 집주소는 개인정보입니다. 계정 사용에 꼭 필요하지 않다면 수집하지 마세요.</span></div>
-        <div class="field"><label for="signup-password">비밀번호</label><input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="비밀번호 입력란 (준비 중)" disabled></div>
-        <label class="consent"><input type="checkbox" disabled><span>회원정보 수집·이용 동의 화면 예시입니다. 실제 약관과 개인정보 처리방침이 마련될 때까지 사용할 수 없습니다.</span></label>
-        <button class="submit" type="button" disabled>회원가입 (준비 중)</button>
-        <p class="status">실제 가입, 인증, 입력정보 전송 및 저장 기능은 구현되어 있지 않습니다.</p>
+      <p class="card-lead">닉네임, 이메일, 비밀번호는 필수입니다. 성별과 집주소는 선택이며 비워 둘 수 있습니다.</p>
+      <form class="form" id="signup-form" action="/api/auth/signup" method="post">
+        <div class="field"><label for="signup-nickname">닉네임</label><input id="signup-nickname" name="nickname" type="text" autocomplete="nickname" minlength="2" maxlength="50" placeholder="닉네임을 입력하세요" required></div>
+        <div class="field"><label for="signup-email">이메일 주소</label><input id="signup-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@example.com" required></div>
+        <fieldset class="field" style="margin:0;padding:0;border:0"><legend class="legend">성별 <span class="hint">(선택)</span></legend><div class="gender-options"><label class="gender-option"><input type="radio" name="gender" value="female">여성</label><label class="gender-option"><input type="radio" name="gender" value="male">남성</label><label class="gender-option"><input type="radio" name="gender" value="undisclosed">선택 안 함</label></div><span class="hint">선택하지 않아도 가입할 수 있습니다.</span></fieldset>
+        <div class="field"><label for="signup-address">집주소 <span class="hint">(선택)</span></label><input id="signup-address" name="address" type="text" autocomplete="street-address" maxlength="500" placeholder="서비스에 필요한 경우에만 입력해 주세요"><span class="hint">정확한 집주소는 선택 정보입니다. 가입에 필요하지 않으면 비워 두세요.</span></div>
+        <div class="field"><label for="signup-password">비밀번호</label><input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" placeholder="12자 이상 입력하세요" required><span class="hint">12~128자. 안전을 위해 12자 이상의 비밀번호를 사용하세요.</span></div>
+        <label class="consent"><input id="signup-consent" name="consent" type="checkbox" required><span>회원정보 수집 및 저장 안내를 확인했으며, 회원가입에 필요한 정보 처리에 동의합니다.</span></label>
+        <button class="submit" type="submit">회원가입</button>
+        <p class="status" id="signup-status" role="status" aria-live="polite"></p>
       </form>
       <p class="switch">이미 회원이신가요? <a href="login.html">로그인 페이지</a></p>
     </section>
   </main>
+  <script>
+    (()=>{const form=document.getElementById('signup-form');const button=form.querySelector('button[type="submit"]');const status=document.getElementById('signup-status');form.addEventListener('submit',async event=>{event.preventDefault();if(!form.reportValidity())return;button.disabled=true;status.textContent='회원정보를 안전하게 등록하고 있습니다.';try{const data=new FormData(form);const response=await fetch('/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nickname:data.get('nickname'),email:data.get('email'),gender:data.get('gender')||null,homeAddress:data.get('address')||null,password:data.get('password')})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'회원가입에 실패했습니다. 잠시 후 다시 시도해 주세요.');status.textContent='회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.';location.assign('login.html?registered=1')}catch(error){status.textContent=error.message||'서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.';button.disabled=false}})})();
+  </script>
 </body>
 </html>

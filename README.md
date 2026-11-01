@@ -33,19 +33,26 @@ sqlite3 inquiries.sqlite ".schema users"
 sqlite3 inquiries.sqlite "SELECT id, nickname, email, gender, home_address, password_hash, created_at, updated_at, deleted_at FROM users;"
 ```
 
-## 아직 구현하지 않은 기능
+## Pages Functions 회원 인증
 
-- 계정 인증, 실제 회원가입 처리 및 개인정보 저장 기능
-- 홈페이지 문의 양식과 DB 연결
-- 문의를 DB에 저장하는 백엔드/API
-- 문의 목록 및 관리자 기능
-- 이 로컬 DB를 웹 서버에서 쓰도록 배포하는 작업
+회원 API는 Cloudflare Pages Functions 및 Production D1의 `DB` binding을 이용합니다.
 
-홈페이지의 문의 입력란과 등록 버튼은 현재 비활성화되어 있습니다. 내용을 작성하거나 실제로 접수했다고 착각하지 않도록 저장 기능이 아직 준비되지 않았다는 안내를 표시합니다. **추후 백엔드 구현을 요청하실 때 그 단계에서 DB와 홈페이지를 연결하겠습니다.**
+- `POST /api/auth/signup`: 닉네임, 이메일, 비밀번호를 검증한 뒤 계정을 만듭니다. 성별과 집주소는 선택 사항이며, 사용자가 입력한 경우에만 저장합니다.
+- `POST /api/auth/login`: 이메일과 비밀번호를 검증하고 8시간 유효한 `HttpOnly`, `Secure`, `SameSite=Lax` 세션 쿠키를 발급합니다.
+- 비밀번호는 Web Crypto `PBKDF2-SHA-256` (600,000회 반복, 사용자별 무작위 salt)으로 해시합니다. 평문 비밀번호는 저장하지 않습니다.
+- 이메일 주소는 대소문자를 구분하지 않고 고유하게 처리합니다. 사용자 데이터는 API 응답이나 로그에 반환하지 않습니다.
+
+**아직 제공하지 않는 기능:** 로그아웃, 로그인 세션 검증을 사용하는 보호 페이지, 사용자 프로필 조회·수정, 계정 삭제. 현재 Pages Function은 회원가입·로그인 요청만 제공합니다.
+
+**개인정보 주의:** 정확한 집주소와 성별은 개인정보이며, 꼭 필요한 경우에만 수집하세요. `users`의 데이터 삭제/탈퇴 및 보관 정책은 추후 운영 기준에 맞춰 별도로 구현해야 합니다.
+
+로그인 및 회원가입 함수 배포는 기존 Pages 프로젝트의 `DB` Production binding을 사용하도록 구성했습니다. Preview에는 production 사용자의 개인정보를 분리하기 위해 운영 D1을 연결하지 않았습니다. 문의 양식은 DB/API와 연결되지 않아 계속 비활성 상태입니다.
 
 ## 기술 스택
 
 - HTML5, CSS3, 기존 홈페이지의 UI를 위한 Vanilla JavaScript
+- Cloudflare Pages Functions와 D1을 이용한 회원가입·로그인 API
+- Cloudflare Web Crypto를 이용한 비밀번호 해시와 서명 세션 쿠키
 - Google Fonts: `Noto Sans KR`, `Gowun Batang`, `DM Sans`
 - 로컬 문의 DB: SQLite
 - 검색 엔진 안내: `robots.txt`, `sitemap.xml`

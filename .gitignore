@@ -4,5 +4,14 @@
 *.db
 *-journal
 
+# Local Wrangler credentials/config overrides
+local.wrangler.jsonc
+wrangler.local.jsonc
+.dev.vars*
+.wrangler/
+
 # Node package files (install only when needed)
 node_modules/
+
+# Cloudflare Pages Functions build artifact
+_worker.bundle

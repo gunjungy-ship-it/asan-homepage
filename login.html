@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f7f8f4">
-  <meta name="description" content="아산 홈페이지 로그인 화면 예시입니다. 현재 계정 인증 기능이 없어 이메일과 비밀번호는 전송되거나 저장되지 않습니다.">
+  <meta name="description" content="아산 홈페이지에 안전하게 로그인하고 여행 정보를 확인하세요.">
   <title>로그인 | 아산, 쉼이 머무는 순간</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,19 +18,22 @@
   <main class="shell">
     <span class="eyebrow">Welcome back</span>
     <h1 class="page-title">로그인</h1>
-    <p class="lead">아산 홈페이지 로그인 화면을 독립된 페이지로 구성했습니다.</p>
-    <p class="warning"><strong>중요: 로그인 및 계정 인증 기능은 아직 준비되지 않았습니다.</strong>이 페이지는 HTML·CSS 디자인 예시입니다. 이메일·비밀번호 입력란과 로그인 버튼은 비활성화되어 있으며, 입력한 계정 정보는 확인·전송·저장되지 않습니다. 실제 비밀번호를 입력하지 마세요.</p>
+    <p class="lead">이메일 주소와 비밀번호로 아산 홈페이지에 로그인하세요.</p>
+    <p class="warning"><strong>보안 안내</strong>로그인 요청은 Cloudflare Pages의 동일 출처 API로 전송됩니다. 비밀번호는 저장된 salted 해시와 비교하며, 인증 성공 시 보안 세션 쿠키를 발급합니다.</p>
     <section class="dark-note" aria-labelledby="login-title">
       <h2 id="login-title">계정 로그인</h2>
-      <p class="note-copy">계정 인증 및 비밀번호 확인 기능은 추후 백엔드 구현과 함께 제공할 예정입니다.</p>
-      <form class="form" action="#" method="get">
-        <div class="field"><label for="login-email">이메일 주소</label><input id="login-email" name="email" type="email" autocomplete="username" placeholder="가입한 이메일 주소" disabled></div>
-        <div class="field"><label for="login-password">비밀번호</label><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="로그인 기능 준비 중" disabled></div>
-        <button class="submit" type="button" disabled>로그인 (준비 중)</button>
-        <p class="status">로그인 기능이 없어 사용자 인증이나 세션이 생성되지 않습니다.</p>
+      <p class="note-copy">가입 시 사용한 이메일 주소와 비밀번호를 입력해 주세요.</p>
+      <form class="form" id="login-form" action="/api/auth/login" method="post">
+        <div class="field"><label for="login-email">이메일 주소</label><input id="login-email" name="email" type="email" autocomplete="username" maxlength="254" placeholder="가입한 이메일 주소" required></div>
+        <div class="field"><label for="login-password">비밀번호</label><input id="login-password" name="password" type="password" autocomplete="current-password" maxlength="128" placeholder="비밀번호 입력" required></div>
+        <button class="submit" type="submit">로그인</button>
+        <p class="status" id="login-status" role="status" aria-live="polite"></p>
       </form>
       <p class="switch">아직 회원이 아니신가요? <a href="signup.html">회원가입 페이지</a></p>
     </section>
   </main>
+  <script>
+    (()=>{const form=document.getElementById('login-form');const button=form.querySelector('button[type="submit"]');const status=document.getElementById('login-status');if(new URLSearchParams(location.search).has('registered'))status.textContent='회원가입이 완료되었습니다. 로그인해 주세요.';form.addEventListener('submit',async event=>{event.preventDefault();if(!form.reportValidity())return;button.disabled=true;status.textContent='로그인 정보를 확인하고 있습니다.';try{const data=new FormData(form);const response=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:data.get('email'),password:data.get('password')})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'로그인에 실패했습니다. 다시 시도해 주세요.');status.textContent=`로그인되었습니다. 환영합니다, ${result.user.nickname}님.`;form.reset()}catch(error){status.textContent=error.message||'서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.'}finally{button.disabled=false}})})();
+  </script>
 </body>
 </html>

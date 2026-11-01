@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "asan-homepage",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2026-11-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "asan-homepage-db",
+      "database_id": "1a6a4ba9-b381-4807-ba56-96a524fc4254",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
