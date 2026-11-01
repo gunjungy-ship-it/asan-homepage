@@ -85,14 +85,19 @@ export async function onRequestPost({ request, env }) {
 	try {
 		const salt = crypto.getRandomValues(new Uint8Array(16));
 		const passwordHash = `pbkdf2-sha256$${PASSWORD_ITERATIONS}$${btoa(String.fromCharCode(...salt))}$${await hashPassword(password, salt)}`;
-		const result = await env.DB.prepare(
-			"INSERT INTO users (nickname, email, gender, home_address, password_hash) VALUES (?, ?, ?, ?, ?)",
-		)
-			.bind(nickname, email.toLowerCase(), gender, homeAddress || null, passwordHash)
-			.run();
+		const accountInsert = env.DB.prepare(
+			"INSERT INTO users (nickname, email, password_hash) VALUES (?, ?, ?)",
+		).bind(nickname, email.toLowerCase(), passwordHash);
+		const profileInsert = env.DB.prepare(
+			"INSERT INTO user_profiles (user_id, gender_code, home_address) " +
+			"SELECT id, ?, ? FROM users WHERE lower(email) = lower(?)",
+		).bind(gender, homeAddress || null, email.toLowerCase());
+		const [accountResult, profileResult] = await env.DB.batch([accountInsert, profileInsert]);
 
-		if (!result.success) throw new Error("D1 user insert failed");
-		return json({ ok: true, id: result.meta.last_row_id, nickname }, 201);
+		if (!accountResult.success || !profileResult.success || profileResult.meta.changes !== 1) {
+			throw new Error("D1 account/profile transaction failed");
+		}
+		return json({ ok: true, id: accountResult.meta.last_row_id, nickname }, 201);
 	} catch (error) {
 		if (error instanceof Error && /unique constraint failed/i.test(error.message)) {
 			return json({ error: "이미 가입된 이메일 주소입니다." }, 409);

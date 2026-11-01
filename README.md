@@ -10,15 +10,30 @@
 
 - SQLite CLI: `3.53.4`
 - 로컬 데이터베이스: `inquiries.sqlite`
-- 테이블 생성 스키마: [`migrations/0001_create_inquiries.sql`](migrations/0001_create_inquiries.sql)
+- 기본 문의 테이블 스키마: [`migrations/0001_create_inquiries.sql`](migrations/0001_create_inquiries.sql)
 - 기존 테이블 업데이트 스키마: [`migrations/0002_add_inquiry_audit_timestamps.sql`](migrations/0002_add_inquiry_audit_timestamps.sql)
-- 회원 테이블 생성 스키마: [`migrations/0003_create_users.sql`](migrations/0003_create_users.sql)
+- 기본 회원 테이블 스키마: [`migrations/0003_create_users.sql`](migrations/0003_create_users.sql)
+- 3NF 정규화 스키마 변경: [`migrations/0004_normalize_user_and_inquiry_data.sql`](migrations/0004_normalize_user_and_inquiry_data.sql)
+- 기존 데이터베이스 migration baseline 기록: [`migrations/0005_record_existing_3nf_baseline.sql`](migrations/0005_record_existing_3nf_baseline.sql)
 - 테이블 이름: `inquiries`
 - DB 파일은 `.gitignore` 처리되어 저장소나 GitHub에 올라가지 않습니다.
 
 문의 테이블은 문의 유형, 제목, 내용, 처리 상태, 생성 시각 및 자동 증가 ID를 저장하도록 준비되어 있습니다. 로컬 DB에 테이블이 생성된 상태이며 홈페이지나 공개 서버의 문의 데이터가 그곳으로 저장되지는 않습니다.
 
-회원가입 화면을 위한 `users` 테이블도 로컬 DB에 만들었습니다. 닉네임, 고유 이메일, 선택 입력 성별, 선택 입력 집주소, 향후 인증용 `password_hash`, 생성·수정·삭제 시각을 위한 컬럼이 있습니다. 비밀번호 평문은 저장하지 않으며, 회원 레코드는 아직 없고 회원가입·로그인 백엔드도 구현하지 않았습니다. 성별과 집주소는 개인정보이므로 실제 서비스에서는 꼭 필요한 경우에만 수집해야 합니다.
+로컬 SQLite와 Production D1에는 3NF 정규화를 적용했습니다. 계정 정보는 `users`, 선택 프로필 정보는 `user_profiles`에 나뉘며, 회원가입 시 두 행은 D1 batch transaction으로 함께 생성됩니다. 회원가입 전이면 두 테이블 모두 비어 있습니다. 비밀번호는 평문으로 저장하지 않으며, 성별과 집주소는 개인정보이므로 꼭 필요한 경우에만 수집해야 합니다.
+
+## DB 3NF 정규화
+
+`0004_normalize_user_and_inquiry_data.sql`은 중복되는 분류/성별 명칭과 사용자 계정/프로필 정보를 참조 테이블과 1:1 프로필로 분리합니다.
+
+- `inquiry_categories`: 문의 유형 코드와 표시 이름을 한 번 저장합니다. `inquiries.category_id`가 이 테이블을 참조합니다.
+- `gender_options`: 성별 코드와 표시 이름을 한 번 저장합니다. `user_profiles.gender_code`가 이 테이블을 참조합니다.
+- `users`: 닉네임·고유 이메일·비밀번호 해시와 계정 시각만 저장합니다.
+- `user_profiles`: 사용자 ID당 최대 한 행으로 선택 성별·주소를 저장합니다. FK로 `users`와 `gender_options`를 참조합니다.
+
+마이그레이션은 기존 사용자·문의 ID, 비밀번호 해시, 문의 본문과 상태·시각을 보존하며 `PRAGMA defer_foreign_keys = ON` 및 D1 트랜잭션 안에서 테이블을 재구성합니다. 회원가입 API도 계정과 프로필 행을 동일한 D1 `batch()` 트랜잭션에서 만듭니다. 분류·성별 코드는 이제 참조 테이블의 외래 키로 검증됩니다.
+
+새 D1/SQLite DB에는 `0001` → `0002` → `0003` → `0004` 순서로 migration을 적용합니다. `0005`는 이전에 스키마를 직접 provision한 이 DB들에 대해서만 0001–0004를 이미 적용된 것으로 기록하는 baseline migration입니다. 이미 `0005`가 실행된 DB에는 migration 0004를 다시 실행하지 않습니다. 이후 새 schema 변경은 순차적인 migration 파일로 추가하고 `wrangler d1 migrations apply asan-homepage-db --local` 또는 `--remote`로 적용합니다. 현재 local SQLite는 예시 문의 10건을 보유하고, Production D1의 사용자·문의 데이터는 비어 있습니다.
 
 `updated_at`은 행이 수정되면 SQLite 트리거가 현재 시각으로 갱신합니다. `deleted_at`은 기본값이 `NULL`이며, 나중에 백엔드를 만들 때 실제 행을 지우지 않고 소프트 삭제 시각을 기록할 수 있도록 마련했습니다. 현재 이 두 기능도 DB 준비 단계이며 문의 입력·수정·삭제 API는 아직 없습니다.
 
@@ -28,9 +43,15 @@
 
 ```powershell
 sqlite3 inquiries.sqlite ".schema inquiries"
-sqlite3 inquiries.sqlite "SELECT id, category, subject, status, created_at, updated_at, deleted_at FROM inquiries;"
+sqlite3 inquiries.sqlite ".schema inquiry_categories"
+sqlite3 inquiries.sqlite ".schema inquiries"
+sqlite3 inquiries.sqlite "SELECT i.id, c.code, i.subject, i.status, i.created_at, i.updated_at, i.deleted_at FROM inquiries i JOIN inquiry_categories c ON c.id = i.category_id;"
 sqlite3 inquiries.sqlite ".schema users"
-sqlite3 inquiries.sqlite "SELECT id, nickname, email, gender, home_address, password_hash, created_at, updated_at, deleted_at FROM users;"
+sqlite3 inquiries.sqlite ".schema gender_options"
+sqlite3 inquiries.sqlite ".schema user_profiles"
+sqlite3 inquiries.sqlite "SELECT u.id, u.nickname, u.email, p.gender_code, p.home_address, u.password_hash, u.created_at, u.updated_at, u.deleted_at FROM users u LEFT JOIN user_profiles p ON p.user_id = u.id;"
+sqlite3 inquiries.sqlite "SELECT u.id, u.nickname, p.gender_code, p.home_address FROM users u LEFT JOIN user_profiles p ON p.user_id = u.id;"
+sqlite3 inquiries.sqlite "SELECT i.id, c.code, i.subject, i.status FROM inquiries i JOIN inquiry_categories c ON c.id = i.category_id;"
 ```
 
 ## Pages Functions 회원 인증
