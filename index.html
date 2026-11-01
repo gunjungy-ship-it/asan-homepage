@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f7f8f4">
-  <meta name="description" content="아산의 자연과 온천 여행 정보를 살펴보고 홈페이지 문의 안내를 확인하세요. 문의 게시판은 HTML·CSS 화면 예시로 작성한 내용은 저장·전송되지 않습니다.">
+  <meta name="description" content="아산의 자연과 온천 여행 정보를 확인하고 홈페이지 문의 방법을 알아보세요. 문의 접수는 Cloudflare D1 데이터베이스 연결 후 이용할 수 있습니다.">
   <meta name="author" content="아산 홈페이지">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://asan-homepage.pages.dev/">
@@ -12,7 +12,7 @@
   <meta property="og:locale" content="ko_KR">
   <meta property="og:site_name" content="아산, 쉼이 머무는 순간">
   <meta property="og:title" content="아산, 쉼이 머무는 순간 | 여행 안내 및 문의">
-  <meta property="og:description" content="아산의 자연과 온천 여행 정보, 홈페이지 문의 안내를 확인하세요. 문의 게시판은 HTML·CSS 화면 예시이며 문의 내용을 접수하지 않습니다.">
+  <meta property="og:description" content="아산의 자연과 온천 여행 정보를 확인하고 홈페이지 문의 방법을 알아보세요. 문의 접수는 Cloudflare D1 데이터베이스 연결 후 이용할 수 있습니다.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://asan-homepage.pages.dev/">
   <title>아산, 쉼이 머무는 순간 | 아산 여행·온천·자연 안내</title>
@@ -54,18 +54,16 @@
     <section class="inquiry-section" id="inquiries" aria-labelledby="inquiries-title" aria-describedby="inquiry-warning">
       <div class="shell"><div class="section-top"><div><span class="eyebrow">Asan travel · Help desk</span><h2 class="section-title" id="inquiries-title">아산 홈페이지 문의하기</h2></div><span class="nav-season">YOUR VOICE MATTERS</span></div>
         <p class="hero-description" style="max-width:680px;margin-bottom:24px">홈페이지와 아산 여행 정보에 궁금한 점이나 개선 의견을 남길 수 있도록 문의 작성 화면과 게시판 예시를 준비했습니다.</p>
-        <p class="inquiry-notice" id="inquiry-warning"><strong>안내: 문의 내용이 전송되지 않는 디자인 예시입니다.</strong>이 홈페이지는 HTML과 CSS만으로 만든 정적 화면이라 작성 내용을 저장하거나 운영자에게 전달할 수 없습니다. 이름·이메일·문의 내용을 입력해도 등록되지 않습니다. 실제 문의를 원하시면 <a href="https://www.asan.go.kr/tour/" target="_blank" rel="noopener noreferrer"><u>아산시 문화관광 공식 사이트</u></a>를 이용해 주세요.</p>
+        <p class="inquiry-notice" id="inquiry-warning"><strong>개인정보 보호 안내</strong>문의 내용과 선택한 문의 유형만 저장합니다. 이름과 이메일은 입력받지 않습니다. 문의 내용에 비밀번호·주민등록번호·연락처 등 민감한 개인정보를 작성하지 마세요. 실제 관광 시설 이용 문의는 <a href="https://www.asan.go.kr/tour/" target="_blank" rel="noopener noreferrer"><u>아산시 문화관광 공식 사이트</u></a>에서도 확인할 수 있습니다.</p>
         <div class="inquiry-layout">
-          <section class="inquiry-panel" aria-labelledby="inquiry-form-title"><h3 id="inquiry-form-title">문의 작성 예시</h3><p class="inquiry-lead">문의 유형을 선택하고 내용을 작성하는 화면 예시입니다. 개인정보를 실제로 입력하지 마세요.</p>
-            <form class="inquiry-form" action="#inquiries" method="get">
-              <div class="inquiry-field"><label for="inquiry-category">문의 유형</label><select id="inquiry-category" name="category" disabled><option>문의 유형을 선택해 주세요</option><option>관광 정보 문의</option><option>온천 여행 문의</option><option>홈페이지 이용 문의</option><option>개선 의견</option></select></div>
-              <div class="inquiry-field"><label for="inquiry-name">작성자</label><input id="inquiry-name" name="name" type="text" placeholder="실제 이름을 입력하지 마세요" disabled></div>
-              <div class="inquiry-field"><label for="inquiry-email">이메일</label><input id="inquiry-email" name="email" type="email" placeholder="실제 이메일을 입력하지 마세요" disabled></div>
-              <div class="inquiry-field"><label for="inquiry-subject">문의 제목</label><input id="inquiry-subject" name="subject" type="text" placeholder="문의 제목 예시" disabled></div>
-              <div class="inquiry-field"><label for="inquiry-message">문의 내용</label><textarea id="inquiry-message" name="message" placeholder="문의 내용은 전송되거나 저장되지 않습니다." disabled></textarea></div>
-              <label class="privacy-check"><input type="checkbox" disabled><span>실제 개인정보를 수집하거나 저장하지 않는 정적 디자인 예시임을 확인했습니다.</span></label>
-              <button class="demo-submit" type="button" disabled aria-describedby="inquiry-submit-note">문의 등록 (디자인 예시)</button>
-              <p class="form-footnote" id="inquiry-submit-note">실제 접수를 원하시면 아산시 공식 관광 사이트에서 문의해 주세요. 문의를 보냈다는 접수 완료 메시지는 표시되지 않습니다.</p>
+          <section class="inquiry-panel" aria-labelledby="inquiry-form-title"><h3 id="inquiry-form-title">문의 작성</h3><p class="inquiry-lead">문의 유형과 내용을 작성해 주세요. 이름과 이메일을 받지 않습니다.</p>
+            <form class="inquiry-form" id="inquiryForm" aria-describedby="inquiry-submit-note">
+              <div class="inquiry-field"><label for="inquiry-category">문의 유형 <span aria-hidden="true">*</span></label><select id="inquiry-category" name="category" required disabled><option value="" selected disabled>문의 유형을 선택해 주세요</option><option value="tourism">관광 정보 문의</option><option value="onsen">온천 여행 문의</option><option value="website">홈페이지 이용 문의</option><option value="suggestion">개선 의견</option></select></div>
+              <div class="inquiry-field"><label for="inquiry-subject">문의 제목 <span aria-hidden="true">*</span></label><input id="inquiry-subject" name="subject" type="text" minlength="2" maxlength="120" placeholder="제목을 입력해 주세요 (2~120자)" required disabled></div>
+              <div class="inquiry-field"><label for="inquiry-message">문의 내용 <span aria-hidden="true">*</span></label><textarea id="inquiry-message" name="message" minlength="5" maxlength="5000" placeholder="문의 내용을 입력해 주세요 (5~5000자). 민감한 개인정보를 입력하지 마세요." required disabled></textarea></div>
+              <label class="privacy-check"><input id="inquiry-consent" type="checkbox" required disabled><span>개인정보 보호 안내를 확인했으며, 문의 내용을 데이터베이스에 저장하는 데 동의합니다. 이름·이메일 등 민감한 정보는 입력하지 않았습니다.</span></label>
+              <button class="demo-submit" id="inquirySubmit" type="submit" disabled>문의 등록</button>
+              <p class="form-footnote" id="inquiry-submit-note" aria-live="polite">현재는 문의 저장 연결이 준비되지 않았습니다. D1 데이터베이스와 홈페이지 연결이 완료되면 문의를 작성할 수 있습니다.</p>
             </form>
           </section>
           <section class="inquiry-list" aria-labelledby="inquiry-list-title"><div class="inquiry-list-head"><h3 id="inquiry-list-title">자주 묻는 문의</h3><span class="sample-badge">안내 예시</span></div><p class="inquiry-lead">실제 이용자의 게시물이 아닌 HTML에 포함된 자주 묻는 질문 예시입니다.</p>
@@ -80,6 +78,7 @@
   <footer class="footer" id="footer"><div class="footer-inner shell"><a class="footer-brand" href="#home">아산, 쉼이 머무는 순간</a><div class="footer-meta"><span>온천의 따스함, 자연의 여유.</span><span>© ASAN TRAVEL</span><a href="https://www.asan.go.kr/tour/" target="_blank" rel="noopener noreferrer">아산시 문화관광 ↗</a></div></div></footer>
   <script>
     (()=>{const toggle=document.getElementById('themeToggle');const menu=document.getElementById('menuToggle');const links=document.getElementById('navLinks');const saved=localStorage.getItem('asan-theme');if(saved==='dark'){document.body.classList.add('dark');toggle.textContent='☀'}toggle.addEventListener('click',()=>{const dark=document.body.classList.toggle('dark');toggle.textContent=dark?'☀':'☾';localStorage.setItem('asan-theme',dark?'dark':'light')});menu.addEventListener('click',()=>{const open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');menu.textContent=open?'×':'☰'});links.addEventListener('click',event=>{if(event.target.closest('a')){links.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','메뉴 열기');menu.textContent='☰'}})})();
+    (()=>{const form=document.getElementById('inquiryForm');if(!form)return;const submit=document.getElementById('inquirySubmit');const status=document.getElementById('inquiry-submit-note');const fields=Array.from(form.querySelectorAll('select,input,textarea'));form.addEventListener('submit',async event=>{event.preventDefault();if(!form.reportValidity())return;submit.disabled=true;status.textContent='문의 내용을 저장하고 있습니다.';try{const data=new FormData(form);const response=await fetch('/api/inquiries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:data.get('category'),subject:data.get('subject'),message:data.get('message')})});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'문의 저장에 실패했습니다. 잠시 후 다시 시도해 주세요.');status.textContent=`문의가 등록되었습니다. 접수 번호: ${result.id}`;form.reset()}catch(error){status.textContent=error.message||'서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.'}finally{submit.disabled=false}});(async()=>{try{const response=await fetch('/api/inquiries',{headers:{'Accept':'application/json','Cache-Control':'no-store'}});const result=await response.json();if(!response.ok||result.ready!==true)throw new Error();for(const field of fields)field.disabled=false;submit.disabled=false;status.textContent='문의 유형·제목·내용만 저장합니다. 개인정보 보호 안내를 확인한 뒤 작성해 주세요.'}catch{status.textContent='현재는 문의 저장 연결이 준비되지 않았습니다. D1 데이터베이스와 홈페이지 연결이 완료되면 문의를 작성할 수 있습니다.'}})()})();
   </script>
 </body>
 </html>

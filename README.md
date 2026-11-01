@@ -6,84 +6,110 @@
 
 ## 프로젝트 소개
 
-아산의 자연, 호수 풍경, 온천을 한 페이지에서 소개합니다. 방문자가 화면에 표시된 여행 주제와 설명을 살펴보고 아산시 문화관광 공식 사이트로 이동할 수 있도록 구성했습니다.
-
-현재 웹사이트는 여러 페이지로 분리된 애플리케이션이 아니라 HTML의 섹션과 앵커 링크를 이용하는 **단일 페이지 정적 웹사이트**입니다.
+아산의 자연, 호수 풍경, 온천을 단일 페이지에서 소개하고, 문의 양식으로 받은 여행·홈페이지 관련 메시지를 Cloudflare Pages Function을 통해 Cloudflare D1 데이터베이스에 저장할 수 있도록 구성했습니다.
 
 ## 적용 기술
 
-- **HTML5:** 한국어 문서 구조, 시맨틱 섹션, 반응형 뷰포트, 검색 및 공유 메타데이터 구성
-- **CSS3:** 한 페이지 안에 포함한 사용자 지정 스타일, CSS 변수, Grid/Flexbox 기반 레이아웃, 반응형 미디어 쿼리
-- **JavaScript (Vanilla):** 기존 홈페이지의 모바일 내비게이션 및 다크 모드 인터랙션에 사용
-- **문의 게시판 UI:** 문의 양식·안내 FAQ를 HTML과 CSS만으로 작성. 문의 내용의 저장·전송은 지원하지 않는 시각적 예시입니다.
-- **Google Fonts:** `Noto Sans KR`, `Gowun Batang`, `DM Sans` 글꼴 사용
-- **SEO:** 페이지 제목·설명, canonical URL, Open Graph 메타데이터, 크롤링 규칙, XML 사이트맵 구성
-- **Cloudflare Pages:** `https://asan-homepage.pages.dev/` 공개 주소에서 페이지 서비스
+- **HTML5·CSS3:** 한국어 시맨틱 문서, 반응형 레이아웃과 문의 양식 UI
+- **JavaScript:** 모바일 메뉴와 테마 전환, JSON API를 통한 비동기 문의 제출
+- **Cloudflare Pages Functions:** `functions/api/inquiries.js`가 `POST /api/inquiries` 요청 검증 및 저장 처리
+- **Cloudflare D1:** SQLite 호환 관리형 데이터베이스. 문의 내용을 `inquiries` 테이블 하나에 저장
+- **Google Fonts:** `Noto Sans KR`, `Gowun Batang`, `DM Sans`
+- **SEO:** 페이지 메타데이터, 섹션별 안내, `robots.txt`, `sitemap.xml`
 
-별도의 npm 패키지나 빌드 도구는 사용하지 않습니다. 개발·실행에 별도 의존성을 설치할 필요가 없습니다.
+## 문의 저장 구조
+
+`migrations/0001_create_inquiries.sql`에 문의 테이블 하나를 생성하는 스키마가 있습니다.
+
+| 컬럼 | 용도 |
+| --- | --- |
+| `id` | 자동 증가 접수 번호 |
+| `category` | 문의 유형 (`tourism`, `onsen`, `website`, `suggestion`) |
+| `subject` | 문의 제목 (2~120자) |
+| `message` | 문의 내용 (5~5000자) |
+| `status` | 처리 상태 (`new`, `in_progress`, `answered`, `closed`) |
+| `created_at` | 문의 접수 시각 (UTC) |
+
+이름, 이메일, IP 주소는 수집하거나 저장하지 않습니다. 개인정보·계정 정보·결제 정보 등 민감한 내용을 문의에 적지 않도록 안내하며, 문의 내용에는 이름·전화번호 등 개인을 식별할 수 있는 정보가 포함되지 않도록 주의해 주세요.
+
+API는 DB에 문의를 등록하지만 문의 목록이나 문의 원문을 공개하는 조회 API는 제공하지 않습니다. 운영자 응답 기능도 포함하지 않습니다. 공개 배포 시에는 필요한 보관 기간·접근 권한·삭제 요청 절차를 운영자가 따로 마련해야 합니다.
+
+## Cloudflare D1 설정
+
+운영 환경에서는 Cloudflare Pages와 호환되는 Cloudflare D1을 사용합니다. 로컬 SQLite 파일을 Cloudflare 서버가 직접 읽지는 않습니다.
+
+1. Cloudflare 대시보드 **Workers & Pages → D1 SQL Database → Create database**에서 `asan-homepage-db`를 생성하고 표시되는 실제 database ID를 복사합니다.
+2. [`wrangler.jsonc`](wrangler.jsonc)의 `database_id`에서 `REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID`를 실제 ID로 교체합니다. 자리표시자가 남아 있으면 프로젝트를 정상 배포할 수 없습니다. database ID는 비밀 키는 아니지만 실제 프로젝트에서 발급된 값이어야 합니다.
+3. Pages 프로젝트의 **Settings → Bindings → Add → D1 database**에서 `DB`라는 binding 이름으로 같은 database를 선택합니다. Production 환경에 반드시 연결하고, Preview 환경에서 문의를 시험하려는 경우 Preview에도 별도로 연결합니다. 변경 내용을 저장합니다.
+4. Pages 프로젝트의 **Settings → Builds & deployments → Production branch**가 `layout`인지 확인하고 배포를 시작합니다. Wrangler 설정의 이름과 database ID도 Cloudflare 대시보드 binding과 일치시킵니다.
+5. 서버에 적용하기 전에 로컬 D1 에뮬레이터에 스키마를 시험 적용하고, 테스트 문의를 전송·확인한 후 Production migration을 실행합니다.
+
+```powershell
+npm install --global wrangler
+npx wrangler login
+npx wrangler d1 migrations apply asan-homepage-db --local
+npx wrangler d1 migrations apply asan-homepage-db --remote
+```
+
+`--local`은 로컬 D1 에뮬레이터에 적용합니다. `--remote`는 실제 운영 D1 스키마를 변경하므로, Cloudflare에서 생성한 database의 이름과 ID를 확인한 뒤 실행하세요. `npx wrangler login`과 실제 D1 database 생성에는 사용자의 Cloudflare 로그인·승인이 필요합니다.
+
+## 저장 API
+
+```text
+POST /api/inquiries
+Content-Type: application/json
+```
+
+```json
+{
+  "category": "tourism",
+  "subject": "아산 관광 안내 문의",
+  "message": "아산 관광 정보를 문의합니다."
+}
+```
+
+정상 등록 시 `201 Created`와 `{ "ok": true, "id": 123 }` 형태의 응답을 반환합니다. 문의 유형과 글자 수는 서버에서도 검증합니다. DB binding이 없거나 스키마가 아직 적용되지 않은 경우 접수에 실패합니다.
+
+## 로컬 확인
+
+먼저 Cloudflare에 로그인하고 올바른 D1 ID와 Pages binding을 설정합니다. 이후 저장소 루트에서:
+
+```powershell
+npx wrangler pages dev .
+```
+
+Wrangler가 안내하는 로컬 주소에서 홈페이지를 열고 테스트 문의를 작성합니다. 로컬 모드의 문의 기록은 로컬 개발 저장소에만 남고, Production database에 저장되지 않습니다. 제출 전 `/api/inquiries`가 `{ "ready": true }`를 반환하는지 확인하세요. 데이터베이스 binding·테이블 migration·함수 배포가 끝나지 않았으면 문의 입력란은 비활성 상태를 유지합니다.
 
 ## 페이지 구성
 
 | 위치 | 내용 |
 | --- | --- |
-| 홈 (`#home`) | 아산 여행의 분위기와 자연·온천 주제 소개 |
-| 아산 이야기 (`#about`) | 아산에서 쉬어 가는 여행 경험 소개 |
-| 여행 장소 (`#places`) | 자연 산책, 호수 풍경, 온천 카드 및 공식 관광 정보 링크 |
-| 문의 게시판 (`#inquiries`) | 문의 양식 디자인, 자주 묻는 질문 예시, 공식 문의처 안내 |
-| 여행 정보 (`#footer`) | 아산시 문화관광 사이트 연결 |
+| `#home` | 아산 소개 |
+| `#about` | 아산 여행 이야기 |
+| `#places` | 자연·호수·온천 소개 |
+| `#inquiries` | 문의 유형·제목·내용 등록 |
+| `#footer` | 아산시 문화관광 공식 사이트 |
 
-문의 양식과 FAQ는 HTML·CSS로 만든 정적 디자인 예시입니다. 입력란과 등록 버튼은 비활성화되어 있으며, 질문 저장·전송이나 운영자 답변 기능은 제공하지 않습니다. 실제 문의는 [아산시 문화관광 공식 사이트](https://www.asan.go.kr/tour/)에서 해 주세요. 실제 접수 기능에는 서버/API나 검증된 폼 서비스, 개인정보 보호 안내가 별도로 필요합니다.
+실제 응답을 위해서는 Cloudflare D1 데이터베이스 생성, `DB` binding 설정, SQL 마이그레이션 적용, Pages Function 배포가 모두 필요합니다. 이 저장소의 소스와 커밋만으로는 운영 DB 연결이나 실제 운영 배포가 자동으로 완료되지 않습니다.
 
-페이지별 제목·설명 작성 내용은 [`seo-pages.md`](seo-pages.md)에서 확인할 수 있습니다. 위 항목은 하나의 HTML 문서 내 섹션이며, 각각 독립적으로 배포되는 페이지는 아닙니다.
-
-## 페이지별 title 및 description
-
-현재 홈페이지는 여러 URL로 분리된 사이트가 아니라, `/` 주소에서 섹션 앵커로 이동하는 단일 페이지입니다. 아래의 여섯 제목과 소개글은 실제 홈페이지의 해당 섹션과 여행 카드에 표시됩니다. HTML의 `<title>`과 기본 `<meta name="description">`은 홈 화면에서 홈페이지 전체를 대표하도록 설정합니다. 섹션별로 검색엔진 결과를 나누려면 별도의 HTML 페이지와 URL이 추가로 필요합니다.
-
-| 페이지·섹션 | 주소 | Title | Description |
-| --- | --- | --- | --- |
-| 홈 | `/` · `#home` | 아산, 쉼이 머무는 순간 \| 아산 여행·온천·자연 안내 | 온천의 따스함과 자연의 싱그러움이 머무는 아산. 자연 산책, 호수 풍경, 온천 휴식까지 아산에서 보내는 여행을 만나보세요. |
-| 아산 이야기 | `/#about` | 아산에서 찾는 느긋한 쉼과 여행 \| 아산 여행 | 온천의 온기와 산책길의 바람이 기다리는 아산. 서두르지 않고 나만의 속도로 쉬어 가는 여행 이야기를 소개합니다. |
-| 아산의 여행 장소 | `/#places` | 아산 여행 장소 \| 자연 산책·호수 풍경·온천 | 계절을 따라 걷는 자연, 잔잔한 호수, 하루의 피로를 달래는 온천까지. 아산에서 즐길 수 있는 여행 주제를 살펴보세요. |
-| 자연 산책 | `/#places` 자연 카드 | 아산의 자연 산책길과 계절 풍경 \| 아산 여행 | 계절마다 달라지는 자연의 표정을 느끼며 산책하고, 아산에서 한 걸음 느리게 쉬어 가는 시간을 만나보세요. |
-| 호수 풍경 | `/#places` 호수 카드 | 아산 호숫가 산책과 물빛 풍경 \| 아산 여행 | 잔잔한 호수와 햇살이 어우러지는 아산의 물가 풍경을 감상하며 하루의 속도를 늦춰보세요. |
-| 아산 온천 | `/#places` 온천 카드 | 아산 온천에서 누리는 따뜻한 휴식 \| 아산 여행 | 오랜 시간 사랑받아온 아산 온천의 따뜻한 물과 편안한 휴식으로 여행의 피로를 달래보세요. |
-
-표의 문안은 [`seo-pages.md`](seo-pages.md)에도 페이지별로 정리되어 있습니다. 자연·호수·온천은 현재 개별 페이지가 아니라 `#places` 안의 카드 섹션입니다.
-
-## 파일 안내
+## 저장소의 주요 파일
 
 ```text
 .
-├── index.html    # 홈페이지, CSS 스타일, JavaScript 인터랙션
-├── robots.txt    # 검색엔진 크롤링 정책 및 사이트맵 위치
-├── seo-pages.md  # 화면별 SEO 제목 및 description 안내
-├── sitemap.xml   # 공개 홈페이지의 정식 URL
-└── README.md     # 프로젝트 및 사용 기술 안내
+├── functions/api/inquiries.js        # 문의 JSON POST API
+├── migrations/0001_create_inquiries.sql # 단일 문의 테이블 스키마
+├── index.html                        # 홈페이지, 폼 UI와 제출 동작
+├── wrangler.jsonc                    # Cloudflare Pages/D1 binding 설정
+├── robots.txt                        # 검색엔진 크롤링 규칙
+├── sitemap.xml                      # 공개 페이지 URL
+├── seo-pages.md                     # 페이지·섹션별 title/description 안내
+└── README.md                        # 이 문서
 ```
 
-## 로컬에서 확인하기
+## SEO 문서
 
-`index.html`을 웹 브라우저에서 열면 확인할 수 있습니다. 또는 저장소 루트에서 Python이 설치되어 있는 경우 간단한 정적 서버를 실행할 수 있습니다.
-
-```powershell
-py -m http.server 8000
-```
-
-그다음 브라우저에서 <http://localhost:8000/>에 접속합니다. 위 명령을 사용하려면 컴퓨터에 Python이 설치되어 있어야 합니다.
-
-## 검색엔진 파일
-
-- [`robots.txt`](robots.txt)는 홈페이지의 크롤링을 허용하고 `sitemap.xml`을 안내합니다.
-- [`sitemap.xml`](sitemap.xml)에는 정식 홈페이지 주소인 `https://asan-homepage.pages.dev/`를 등록했습니다.
-- `#home`, `#about`, `#places` 등의 앵커는 별도 페이지 URL이 아니므로 각각을 독립적인 사이트맵 페이지로 등록하지 않았습니다.
-
-## 배포 안내
-
-정적 파일을 사용하므로 웹 호스팅 서비스에서 저장소의 파일을 직접 제공할 수 있습니다. 현재 안내된 공개 주소는 Cloudflare Pages 주소입니다.
-
-> **배포 상태 주의:** 저장소의 변경 사항은 Git 커밋·푸시 상태와 호스팅 사이트에 실제 게시된 상태가 서로 다를 수 있습니다. 이 README를 작성하는 시점에는 `layout` 브랜치의 SEO 변경 사항이 `origin/layout`에 푸시되어 있지만, Cloudflare Pages가 해당 브랜치를 배포하도록 연결되어 있는지는 확인되지 않았습니다. `/robots.txt`, `/sitemap.xml` 주소도 실제 배포 서버에서 올바른 파일과 콘텐츠 유형을 반환하는지 확인한 후 공개 상태로 안내하세요.
+단일 HTML 페이지이므로 `<title>`과 기본 meta description은 홈페이지 전체를 대표합니다. 섹션별 제목 및 소개 문안은 [`seo-pages.md`](seo-pages.md)에 정리되어 있습니다.
 
 ## 라이선스
 
-현재 저장소에는 별도의 라이선스 파일이 등록되어 있지 않습니다. 사진과 외부 글꼴은 각 제공자의 이용 약관을 확인해 사용하세요.
+저장소에 별도의 라이선스 파일은 등록되어 있지 않습니다. 사용된 사진과 외부 글꼴은 각 제공자의 이용 약관을 확인하세요.

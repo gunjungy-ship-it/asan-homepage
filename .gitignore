@@ -1,0 +1,14 @@
+# Cloudflare local settings and credentials
+.dev.vars
+.dev.vars.*
+.wrangler/
+wrangler.local.jsonc
+
+# Local SQLite databases and journals
+*.sqlite
+*.sqlite3
+*.db
+*-journal
+
+# Node package files (install only when needed)
+node_modules/
