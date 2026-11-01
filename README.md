@@ -68,4 +68,4 @@ sqlite3 inquiries.sqlite "SELECT id, nickname, email, gender, home_address, pass
 
 각 계정 페이지의 HTML `<title>`과 meta description은 해당 파일에 별도로 설정되어 있습니다. 세부 SEO 문안은 [`seo-pages.md`](seo-pages.md)를 참고하세요.
 
-로컬 Pages Functions 개발 시 `.dev.vars` 파일에 48바이트 이상의 무작위 `SESSION_SECRET`을 설정합니다. `.dev.vars`는 `.gitignore` 대상이며 반드시 Production secret과 분리합니다. 운영 비밀값은 `npx wrangler pages secret put SESSION_SECRET --project-name asan-homepage` 명령으로 설정합니다.
+로컬 Pages Functions 개발 시 `.dev.vars` 파일에 48바이트 이상의 무작위 `SESSION_SECRET`을 설정합니다. `.dev.vars`는 `.gitignore` 대상이며 반드시 Production secret과 분리합니다. 운영 비밀값은 `npx wrangler pages secret put SESSION_SECRET --project-name asan-homepage` 명령으로 설정합니다. Git 연동 Production에서는 secret을 설정한 뒤 `layout` 브랜치에 변경을 푸시해 새 배포가 완료되어야 로그인 API가 해당 값을 사용합니다.
