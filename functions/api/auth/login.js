@@ -106,7 +106,7 @@ export async function onRequestPost({ request, env }) {
 
 	try {
 		const user = await env.DB.prepare(
-			"SELECT id, nickname, password_hash FROM users WHERE email = ? COLLATE NOCASE AND deleted_at IS NULL LIMIT 1",
+			"SELECT id, nickname, password_hash FROM users WHERE lower(email) = lower(?) AND deleted_at IS NULL LIMIT 1",
 		)
 			.bind(email)
 			.first();
