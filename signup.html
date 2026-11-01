@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8f4">
+  <meta name="description" content="아산 홈페이지 회원가입 화면 예시입니다. 아직 가입 기능이 없어 입력한 정보는 전송되거나 저장되지 않습니다.">
+  <title>회원가입 | 아산, 쉼이 머무는 순간</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--paper:#f7f8f4;--ink:#243b32;--muted:#69756d;--green:#54775d;--lime:#e4edcf;--line:rgba(36,59,50,.14);--serif:'Gowun Batang',serif;--sans:'Noto Sans KR',sans-serif;--serif-en:'DM Sans',sans-serif}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,input{font:inherit}.shell{width:min(1020px,calc(100% - 48px));margin-inline:auto}.topbar{height:76px;border-bottom:1px solid var(--line)}.nav{height:100%;display:flex;justify-content:space-between;align-items:center}.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:22px;font-weight:700}.brand-icon{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--green);border-radius:50%;color:var(--green);font-family:var(--serif-en);font-size:18px}.back-link{font-size:12px;color:var(--muted)}.back-link:hover{color:var(--green)}main{padding:50px 0 76px}.eyebrow{display:flex;align-items:center;gap:10px;color:var(--green);font-family:var(--serif-en);font-size:10px;letter-spacing:2px;text-transform:uppercase}.eyebrow:before{content:'';width:23px;height:1px;background:var(--green)}h1,h2,p{margin-top:0}.page-title{margin:13px 0 9px;font-family:var(--serif);font-size:clamp(34px,5vw,47px);font-weight:400;letter-spacing:-1.5px}.lead{margin-bottom:25px;color:var(--muted);font-size:13px;line-height:1.9}.warning{margin-bottom:26px;padding:16px 18px;border-left:3px solid #bb7c3c;background:#f8f1e9;color:#64492f;font-size:12px;line-height:1.9;word-break:keep-all}.warning strong{display:block;margin-bottom:4px}.card{max-width:680px;padding:32px;background:#fff;border:1px solid var(--line);border-radius:4px}.card-title{margin:0 0 7px;font-family:var(--serif);font-size:23px;font-weight:400}.card-lead{margin-bottom:22px;color:var(--muted);font-size:12px;line-height:1.8}.form{display:grid;gap:16px}.field{display:grid;gap:7px}.field label,.legend{padding:0;font-size:12px;font-weight:600}.field input{width:100%;min-height:46px;padding:11px 13px;border:1px solid var(--line);border-radius:3px;background:var(--paper);color:var(--ink);font-size:13px}.field input::placeholder{color:#929b93}.gender-options{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:2px}.gender-option{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px}.gender-option input{width:16px;height:16px;accent-color:var(--green)}.hint{color:var(--muted);font-size:10px;line-height:1.7}.consent{display:flex;align-items:flex-start;gap:9px;color:var(--muted);font-size:10px;line-height:1.8}.consent input{flex:none;width:15px;height:15px;margin:2px 0 0}.submit{width:100%;min-height:46px;border:0;border-radius:3px;background:var(--green);color:white;font-size:12px;cursor:not-allowed;opacity:.62}.status{margin:0;color:var(--muted);font-size:10px;line-height:1.8}.switch{margin:19px 0 0;text-align:center;color:var(--muted);font-size:11px}.switch a{color:var(--green);text-decoration:underline;text-underline-offset:3px}input:disabled{opacity:.7;cursor:not-allowed}@media(max-width:600px){.shell{width:calc(100% - 34px)}.topbar{height:66px}main{padding:36px 0 55px}.card{padding:22px 18px}.warning{padding:13px 14px}.page-title{font-size:36px}}
+  </style>
+</head>
+<body>
+  <header class="topbar"><nav class="nav shell" aria-label="페이지 메뉴"><a class="brand" href="index.html" aria-label="아산 홈페이지로 돌아가기"><span class="brand-icon">a.</span><span>아산</span></a><a class="back-link" href="index.html">← 홈페이지로</a></nav></header>
+  <main class="shell">
+    <span class="eyebrow">Create your account</span>
+    <h1 class="page-title">아산 홈페이지 회원가입</h1>
+    <p class="lead">회원가입 화면을 별도 페이지로 구성했습니다. 닉네임, 이메일, 성별, 집주소와 비밀번호 입력란을 확인할 수 있습니다.</p>
+    <p class="warning"><strong>중요: 회원가입과 정보 저장 기능은 아직 준비되지 않았습니다.</strong>이 페이지는 HTML·CSS 디자인 예시이며 모든 입력란과 버튼이 비활성화되어 있습니다. 입력한 정보는 전송되거나 저장되지 않습니다. 실제 집주소·성별·비밀번호 등 개인정보를 입력하지 마세요.</p>
+    <section class="card" aria-labelledby="signup-form-title">
+      <h2 class="card-title" id="signup-form-title">회원 정보</h2>
+      <p class="card-lead">향후 계정 기능을 위한 입력 화면 예시입니다. 성별과 집주소는 개인정보이므로 실제 서비스에서 필요한 경우에만 수집해야 합니다.</p>
+      <form class="form" action="#" method="get">
+        <div class="field"><label for="signup-nickname">닉네임</label><input id="signup-nickname" name="nickname" type="text" autocomplete="nickname" placeholder="닉네임을 입력하세요" disabled></div>
+        <div class="field"><label for="signup-email">이메일 주소</label><input id="signup-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" disabled></div>
+        <fieldset class="field" style="margin:0;padding:0;border:0"><legend class="legend">성별</legend><div class="gender-options"><label class="gender-option"><input type="radio" name="gender" value="female" disabled>여성</label><label class="gender-option"><input type="radio" name="gender" value="male" disabled>남성</label><label class="gender-option"><input type="radio" name="gender" value="undisclosed" disabled>선택 안 함</label></div><span class="hint">필수 정보가 아니라면 성별을 수집하지 않는 방식을 권장합니다.</span></fieldset>
+        <div class="field"><label for="signup-address">집주소</label><input id="signup-address" name="address" type="text" autocomplete="street-address" placeholder="집주소 입력란 (실제 주소를 입력하지 마세요)" disabled><span class="hint">정확한 집주소는 개인정보입니다. 계정 사용에 꼭 필요하지 않다면 수집하지 마세요.</span></div>
+        <div class="field"><label for="signup-password">비밀번호</label><input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="비밀번호 입력란 (준비 중)" disabled></div>
+        <label class="consent"><input type="checkbox" disabled><span>회원정보 수집·이용 동의 화면 예시입니다. 실제 약관과 개인정보 처리방침이 마련될 때까지 사용할 수 없습니다.</span></label>
+        <button class="submit" type="button" disabled>회원가입 (준비 중)</button>
+        <p class="status">실제 가입, 인증, 입력정보 전송 및 저장 기능은 구현되어 있지 않습니다.</p>
+      </form>
+      <p class="switch">이미 회원이신가요? <a href="login.html">로그인 페이지</a></p>
+    </section>
+  </main>
+</body>
+</html>

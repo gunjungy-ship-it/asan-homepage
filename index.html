@@ -39,7 +39,7 @@
     <nav class="nav shell" aria-label="주요 메뉴">
       <a class="brand" href="#home" aria-label="아산, 처음으로"><span class="brand-icon">a.</span><span>아산</span></a>
       <div class="nav-links" id="navLinks"><a href="#about">아산 이야기</a><a href="#places">여행 장소</a><a href="#onsen">온천의 시간</a><a href="#inquiries">문의 게시판</a></div>
-      <div class="nav-right"><span class="nav-season">A CITY IN BLOOM · KOREA</span><div class="account-actions" aria-label="회원 메뉴"><a class="account-link" href="#login">로그인</a><a class="account-link account-link--primary" href="#signup">회원가입</a></div><button class="theme-toggle" id="themeToggle" type="button" aria-label="다크 모드 전환" title="다크 모드 전환">☾</button><button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button></div>
+      <div class="nav-right"><span class="nav-season">A CITY IN BLOOM · KOREA</span><div class="account-actions" aria-label="회원 메뉴"><a class="account-link" href="login.html">로그인</a><a class="account-link account-link--primary" href="signup.html">회원가입</a></div><button class="theme-toggle" id="themeToggle" type="button" aria-label="다크 모드 전환" title="다크 모드 전환">☾</button><button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button></div>
     </nav>
   </header>
   <main id="home">
@@ -53,41 +53,6 @@
       <a class="place-card" href="https://www.asan.go.kr/tour/" target="_blank" rel="noopener noreferrer"><div class="place-image"><img loading="lazy" src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&amp;fit=crop&amp;w=850&amp;q=80" alt="따뜻한 휴식을 떠올리게 하는 고요한 스파 공간"><span class="place-tag">ONSEN · 온천</span></div><div class="place-info"><div><h3 id="onsen">아산 온천에서 누리는 따뜻한 휴식 | 아산 여행</h3><p>오랜 시간 사랑받아온 아산 온천의 따뜻한 물과 편안한 휴식으로 여행의 피로를 달래보세요.</p></div><span class="place-arrow" aria-hidden="true">↗</span></div></a>
     </div></section>
     <section class="manifesto shell" id="about" aria-labelledby="about-title" aria-description="아산에서 찾는 느긋한 쉼과 여행 | 아산 여행. 온천의 온기와 산책길의 바람이 기다리는 아산. 서두르지 않고 나만의 속도로 쉬어 가는 여행 이야기를 소개합니다."><div><span class="eyebrow">아산에서 찾는 느긋한 쉼과 여행 | 아산 여행</span><h2 id="about-title">떠나온 만큼,<br>나에게 가까워지는 곳.</h2></div><div class="manifesto-copy"><p>온천의 온기와 산책길의 바람이 기다리는 아산. 서두르지 않고 나만의 속도로 쉬어 가는 여행 이야기를 소개합니다.</p><p>어떤 계획도 없어도 괜찮아요.<br>오늘은 그저, 천천히 걸어보세요.</p><a class="section-link" href="https://www.asan.go.kr/tour/" target="_blank" rel="noopener noreferrer">아산 공식 관광 정보 확인하기 ↗</a></div></section>
-    <section class="account-section" id="accounts" aria-labelledby="accounts-title" aria-describedby="account-warning">
-      <div class="shell">
-        <div class="section-top"><div><span class="eyebrow">Asan travel · Account</span><h2 class="section-title" id="accounts-title">회원가입 및 로그인</h2></div><span class="nav-season">WELCOME TO ASAN</span></div>
-        <p class="account-intro">아산 홈페이지의 회원가입 및 로그인 화면 예시입니다. 회원정보 보호를 위해 필요한 정보와 개인정보 처리 목적을 명확히 안내하고, 실제 계정 기능이 준비될 때까지 입력창과 버튼을 비활성화했습니다.</p>
-        <p class="account-warning" id="account-warning"><strong>중요: 현재 계정 기능은 디자인 예시입니다.</strong>HTML과 CSS만으로는 회원가입·로그인·인증·정보 저장을 처리할 수 없습니다. 입력란과 버튼은 사용할 수 없으며, 입력한 내용은 전송되거나 저장되지 않습니다. 이 화면에는 실제 집주소나 기타 개인정보를 입력하지 마세요.</p>
-        <div class="account-grid">
-          <section class="account-card" id="signup" aria-labelledby="signup-title">
-            <h3 id="signup-title">회원가입</h3>
-            <p class="account-card-description">요청하신 회원정보 항목을 미리 구성했습니다. 집주소와 성별은 개인정보이므로, 실제 회원가입을 운영할 때 수집 필요성과 안전한 처리 절차를 먼저 마련해야 합니다.</p>
-            <form class="account-form" action="#signup" method="get">
-              <div class="account-field"><label for="signup-nickname">닉네임</label><input id="signup-nickname" name="nickname" type="text" autocomplete="nickname" placeholder="닉네임 입력 예시" disabled></div>
-              <div class="account-field"><label for="signup-email">이메일 주소</label><input id="signup-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" disabled></div>
-              <fieldset class="account-field" style="margin:0;padding:0;border:0"><legend class="account-field-label">성별</legend><div class="gender-options"><label class="gender-option"><input type="radio" name="gender" value="female" disabled>여성</label><label class="gender-option"><input type="radio" name="gender" value="male" disabled>남성</label><label class="gender-option"><input type="radio" name="gender" value="undisclosed" disabled>선택 안 함</label></div><span class="account-field-hint">필수 정보가 아니라면 성별을 수집하지 않는 방식을 권장합니다.</span></fieldset>
-              <div class="account-field"><label for="signup-address">집주소</label><input id="signup-address" name="address" type="text" autocomplete="street-address" placeholder="집주소 입력 예시 — 실제 주소를 입력하지 마세요" disabled><span class="account-field-hint">정확한 집주소는 민감한 개인정보입니다. 서비스에 꼭 필요한 경우가 아니면 수집하지 마세요.</span></div>
-              <div class="account-field"><label for="signup-password">비밀번호</label><input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="회원 기능 준비 중" disabled></div>
-              <label class="account-consent"><input type="checkbox" disabled><span>회원정보 수집·이용 동의 안내 예시. 실제 동의문과 개인정보 처리방침이 마련될 때까지 비활성화되어 있습니다.</span></label>
-              <button class="account-submit" type="button" disabled>회원가입 (준비 중)</button>
-              <p class="account-status">회원가입 기능이 준비되지 않아 입력 및 제출할 수 없습니다.</p>
-            </form>
-            <p class="account-switch">이미 회원이신가요? <a href="#login">로그인 화면</a></p>
-          </section>
-          <section class="account-card" id="login" aria-labelledby="login-title">
-            <h3 id="login-title">로그인</h3>
-            <p class="account-card-description">이미 등록된 계정으로 로그인하는 화면 예시입니다. 현재 사용자 계정이나 인증 기능은 없습니다.</p>
-            <form class="account-form" action="#login" method="get">
-              <div class="account-field"><label for="login-email">이메일 주소</label><input id="login-email" name="email" type="email" autocomplete="username" placeholder="가입한 이메일 주소" disabled></div>
-              <div class="account-field"><label for="login-password">비밀번호</label><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="비밀번호 입력" disabled></div>
-              <button class="account-submit" type="button" disabled>로그인 (준비 중)</button>
-              <p class="account-status">실제 계정이나 입력값은 확인·전송·저장되지 않습니다.</p>
-            </form>
-            <p class="account-switch">아직 회원이 아니신가요? <a href="#signup">회원가입 화면</a></p>
-          </section>
-        </div>
-      </div>
-    </section>
     <section class="inquiry-section" id="inquiries" aria-labelledby="inquiries-title" aria-describedby="inquiry-warning">
       <div class="shell"><div class="section-top"><div><span class="eyebrow">Asan travel · Help desk</span><h2 class="section-title" id="inquiries-title">아산 홈페이지 문의하기</h2></div><span class="nav-season">YOUR VOICE MATTERS</span></div>
         <p class="hero-description" style="max-width:680px;margin-bottom:24px">홈페이지와 아산 여행 정보에 궁금한 점이나 개선 의견을 남길 수 있도록 문의 작성 화면과 게시판 예시를 준비했습니다.</p>
